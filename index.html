@@ -117,30 +117,26 @@
 
         /* Snowflake container */
         body {
-                margin: 0;
-                overflow-x: hidden;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: white; /* White color for the snowflake */
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10px);
             }
-        
-            .snowflake {
-                position: fixed;
-                top: -10px;
-                width: 10px;
-                height: 10px;
-                background: white;
-                opacity: 0.8;
-                border-radius: 50%;
-                pointer-events: none;
-                animation: fall linear infinite;
+            100% {
+                transform: translateY(100vh);
             }
-        
-            @keyframes fall {
-                0% {
-                    transform: translateY(-10px);
-                }
-                100% {
-                    transform: translateY(100vh);
-                }
-            }
+        }
     </style>
 </head>
 <body>
@@ -290,32 +286,36 @@
         window.onload = loadContent;
     </script>
         <!-- Merry X'mas -->
-    <script>
-    // Function to generate snowflakes
-    function createSnowflake() {
-        const snowflake = document.createElement('div');
-        snowflake.classList.add('snowflake');
+
+        <script>
+            // Function to generate snowflakes
+            function createSnowflake() {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
         
-        // Randomize size and position
-        const size = Math.random() * 5 + 5; // Snowflake size between 5px and 10px
-        snowflake.style.width = `${size}px`;
-        snowflake.style.height = `${size}px`;
-        snowflake.style.left = `${Math.random() * 100}vw`; // Random position across the viewport
-        snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`; // Fall duration 2-5 seconds
-        snowflake.style.opacity = Math.random(); // Random opacity
+                // Randomize size and position
+                const size = Math.random() * 20 + 10; // Snowflake size between 10px and 30px
+                snowflake.style.fontSize = `${size}px`; // Set font size
+                snowflake.style.left = `${Math.random() * 100}vw`; // Random position across the viewport
+                snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`; // Fall duration 2-5 seconds
+                snowflake.style.opacity = Math.random(); // Random opacity
         
-        // Add the snowflake to the body
-        document.body.appendChild(snowflake);
+                // Set the ❄ symbol
+                snowflake.innerText = '❄';
         
-        // Remove the snowflake once the animation is complete
-        setTimeout(() => {
-            snowflake.remove();
-        }, 5000); // Matches maximum animation duration
-    }
-    
-    // Generate snowflakes at intervals
-    setInterval(createSnowflake, 200); // Adjust the interval for density
-    </script>
+                // Add the snowflake to the body
+                document.body.appendChild(snowflake);
+        
+                // Remove the snowflake once the animation is complete
+                setTimeout(() => {
+                    snowflake.remove();
+                }, 5000); // Matches maximum animation duration
+            }
+        
+            // Generate snowflakes at intervals
+            setInterval(createSnowflake, 200); // Adjust the interval for density
+        </script>
+        
 
 </body>
 </html>
