@@ -1,9 +1,9 @@
 const CACHE_NAME = 'my-pwa-cache-v1';
 const urlsToCache = [
-    'reels/',
-    'reels/index.html',
-    'reels/style.css',
-    'reels/favicon.png'
+    'https://fbtool.github.io/reels/',
+    'https://fbtool.github.io/reels/index.html',
+    'https://fbtool.github.io/reels/style.css',
+    'https://fbtool.github.io/reels/favicon.png'
 ];
 
 // Install Service Worker
