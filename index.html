@@ -24,7 +24,6 @@
             transition: background-color 0.3s, color 0.3s;
             position: relative;
         }
-
         :root {
             --background-color: #000000;
             --text-color: #ffffff;
@@ -125,7 +124,7 @@
         .snowflake {
             position: fixed;
             top: -10px;
-            color: white;
+            color: white; /* White color for the snowflake */
             pointer-events: none;
             animation: fall linear infinite;
         }
@@ -179,15 +178,25 @@
                 const locationsResponse = await fetch('locations.txt');
                 const agesResponse = await fetch('ages.txt');
 
-                captions = (await captionsResponse.text()).split('----').map(c => c.trim()).filter(c => !usedCaptions.includes(c));
-                hashtags = (await hashtagsResponse.text()).split('\n').map(t => t.trim()).filter(Boolean);
-                emojis = (await emojisResponse.text()).split('\n').map(e => e.trim()).filter(Boolean);
-                countries = (await countriesResponse.text()).split('\n').map(c => c.trim()).filter(Boolean);
-                jobs = (await jobsResponse.text()).split('\n').map(j => j.trim()).filter(Boolean);
-                names = (await namesResponse.text()).split('\n').map(n => n.trim()).filter(Boolean);
-                calls = (await callsResponse.text()).split('\n').map(c => c.trim()).filter(Boolean);
-                locations = (await locationsResponse.text()).split('\n').map(l => l.trim()).filter(Boolean);
-                ages = (await agesResponse.text()).split('\n').map(a => a.trim()).filter(Boolean);
+                const captionsText = await captionsResponse.text();
+                const hashtagsText = await hashtagsResponse.text();
+                const emojisText = await emojisResponse.text();
+                const countriesText = await countriesResponse.text();
+                const jobsText = await jobsResponse.text();
+                const namesText = await namesResponse.text();
+                const callsText = await callsResponse.text();
+                const locationsText = await locationsResponse.text();
+                const agesText = await agesResponse.text();
+
+                captions = captionsText.split('----').map(caption => caption.trim()).filter(c => !usedCaptions.includes(c));
+                hashtags = hashtagsText.split('\n').map(tag => tag.trim()).filter(tag => tag !== '');
+                emojis = emojisText.split('\n').map(emoji => emoji.trim()).filter(emoji => emoji !== '');
+                countries = countriesText.split('\n').map(country => country.trim()).filter(country => country !== '');
+                jobs = jobsText.split('\n').map(job => job.trim()).filter(job => job !== '');
+                names = namesText.split('\n').map(name => name.trim()).filter(name => name !== '');
+                calls = callsText.split('\n').map(call => call.trim()).filter(call => call !== '');
+                locations = locationsText.split('\n').map(location => location.trim()).filter(location => location !== '');
+                ages = agesText.split('\n').map(age => age.trim()).filter(age => age !== '');
 
                 shuffleCaptions();
                 updateCaptionInfo();
@@ -229,42 +238,86 @@
                 .replace('{call}', getRandomItem(calls))
                 .replace('{location}', getRandomItem(locations))
                 .replace('{age}', getRandomItem(ages));
+            const finalCaption = `${captionWithPlaceholders}\n${hashtagsSet}`;
 
-            captionBox.value = `${captionWithPlaceholders}\n\n${hashtagsSet}`;
             usedCaptions.push(nextCaption);
             localStorage.setItem('usedCaptions', JSON.stringify(usedCaptions));
+
+            captionBox.value = finalCaption;
             updateCaptionInfo();
         }
 
-        function getRandomItem(array) {
-            return array.length > 0 ? array[Math.floor(Math.random() * array.length)] : '';
+        function getRandomItem(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
         }
 
         function copyAndNext() {
             const captionBox = document.getElementById('caption-box');
-            navigator.clipboard.writeText(captionBox.value).then(() => {
-                showCaption();
-            }).catch(err => console.error('Error copying text: ', err));
+            const currentCaption = captionBox.value;
+
+            navigator.clipboard.writeText(currentCaption)
+                .then(() => {
+                    console.log('Copied to clipboard:', currentCaption);
+                })
+                .catch(err => {
+                    console.error('Could not copy text:', err);
+                });
+
+            showCaption();
+        }
+
+        function updateCaptionInfo() {
+            document.getElementById('total-captions').textContent = `Total Captions: ${captions.length + usedCaptions.length}`;
+            document.getElementById('remaining-captions').textContent = `Remaining: ${captions.length}`;
         }
 
         function resetCaptions() {
             usedCaptions = [];
-            localStorage.setItem('usedCaptions', JSON.stringify(usedCaptions));
+            localStorage.removeItem('usedCaptions');
             loadContent();
-        }
-
-        function updateCaptionInfo() {
-            document.getElementById('total-captions').innerText = `Total Captions: ${usedCaptions.length + captions.length}`;
-            document.getElementById('remaining-captions').innerText = `Remaining: ${captions.length}`;
+            document.getElementById('copy-button').disabled = false;
         }
 
         function toggleTheme() {
-            const body = document.body;
-            const isDark = body.getAttribute('data-theme') === 'dark';
-            body.setAttribute('data-theme', isDark ? '' : 'dark');
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
         }
 
-        loadContent();
+        window.onload = loadContent;
     </script>
+        <!-- Merry X'mas -->
+
+        <script>
+            // Function to generate snowflakes
+            function createSnowflake() {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+        
+                // Randomize size and position
+                const size = Math.random() * 20 + 10; // Snowflake size between 10px and 30px
+                snowflake.style.fontSize = `${size}px`; // Set font size
+                snowflake.style.left = `${Math.random() * 100}vw`; // Random position across the viewport
+                snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`; // Fall duration 2-5 seconds
+                snowflake.style.opacity = Math.random(); // Random opacity
+        
+                // Set the ❄ symbol
+                snowflake.innerText = '❄';
+        
+                // Add the snowflake to the body
+                document.body.appendChild(snowflake);
+        
+                // Remove the snowflake once the animation is complete
+                setTimeout(() => {
+                    snowflake.remove();
+                }, 5000); // Matches maximum animation duration
+            }
+        
+            // Generate snowflakes at intervals
+            setInterval(createSnowflake, 200); // Adjust the interval for density
+        </script>
+        <audio id="background-music" autoplay loop>
+            <source src="bg.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
 </body>
 </html>
