@@ -3,7 +3,7 @@ const urlsToCache = [
     '/',
     '/index.html',
     '/style.css',
-    '/images/favicon.png'
+    '/favicon.png'
 ];
 
 // Install Service Worker
