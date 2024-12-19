@@ -153,6 +153,8 @@
         <button id="reset-button" onclick="resetCaptions()">Reset Captions</button>
     </div>
     <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
+    <!-- Background music -->
+    <audio id="background-music" src="bg.mp3" loop></audio>
 
     <script>
         let captions = [];
@@ -316,6 +318,48 @@
             setInterval(createSnowflake, 200); // Adjust the interval for density
         </script>
         
-
+        <script>
+            // Get the audio element
+            const bgMusic = document.getElementById('background-music');
+        
+            // Set initial volume (25%)
+            bgMusic.volume = 0.25;
+        
+            // Play the music with a fade-in effect
+            function playMusic() {
+                let volume = 0; // Start from 0 volume
+                bgMusic.currentTime = 0; // Reset music to the beginning
+                bgMusic.play();
+                const fadeIn = setInterval(() => {
+                    if (volume < 0.25) {
+                        volume += 0.01; // Gradually increase volume
+                        bgMusic.volume = volume;
+                    } else {
+                        clearInterval(fadeIn); // Stop the fade-in once target volume is reached
+                    }
+                }, 100); // Adjust fade-in speed
+            }
+        
+            // Fade out the music
+            function fadeOutMusic() {
+                let volume = bgMusic.volume; // Get current volume
+                const fadeOut = setInterval(() => {
+                    if (volume > 0) {
+                        volume -= 0.01; // Gradually decrease volume
+                        bgMusic.volume = volume;
+                    } else {
+                        clearInterval(fadeOut); // Stop the fade-out once volume is 0
+                        playMusic(); // Restart the music with a fade-in
+                    }
+                }, 100); // Adjust fade-out speed
+            }
+        
+            // Start music and listen for the loop end to fade out and restart
+            bgMusic.addEventListener('ended', fadeOutMusic);
+        
+            // Start the music when the page loads
+            window.onload = playMusic;
+        </script>
+        
 </body>
 </html>
