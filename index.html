@@ -278,9 +278,19 @@
         }
 
         function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
-        }
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const audio = document.getElementById('background-music');
+
+        // Toggle between light and dark theme
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            audio.pause();  // Pause music when switching to light theme
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            audio.play();  // Play music when switching to dark theme
+    }
+}
+
 
         window.onload = loadContent;
     </script>
