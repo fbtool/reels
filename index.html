@@ -115,35 +115,34 @@
             background-color: var(--button-hover-bg);
         }
 
-            /* Snowflake container styles */
-    .snowflake {
+        .snowflake {
       position: fixed;
       top: -10px;
-      color: white;
       font-size: 12px;
       opacity: 0.8;
       animation: fall linear infinite, sway ease-in-out infinite;
-    }
+      color: #fff;
+      pointer-events: none;
+      z-index: 9999;
+  }
 
-    @keyframes fall {
+  @keyframes fall {
       0% {
-        transform: translateY(-10px);
-        opacity: 1;
+          transform: translateY(-10px);
       }
       100% {
-        transform: translateY(100vh);
-        opacity: 0.5;
+          transform: translateY(100vh);
       }
-    }
+  }
 
-    @keyframes sway {
+  @keyframes sway {
       0%, 100% {
-        transform: translateX(0px);
+          transform: translateX(0);
       }
       50% {
-        transform: translateX(15px);
+          transform: translateX(15px);
       }
-    }
+  }
     </style>
 </head>
 <body>
@@ -293,22 +292,20 @@
     </script>
 
     <script>
-        const snowContainer = document.getElementById('snow-container');
-
         function createSnowflake() {
-        const snowflake = document.createElement('div');
-        snowflake.className = 'snowflake';
-        snowflake.textContent = '❄'; // Snowflake character
-        snowflake.style.left = Math.random() * window.innerWidth + 'px';
-        snowflake.style.animationDuration = Math.random() * 3 + 2 + 's'; // Between 2s and 5s
-        snowflake.style.fontSize = Math.random() * 10 + 10 + 'px'; // Between 10px and 20px
-        snowContainer.appendChild(snowflake);
-
-        // Remove the snowflake after it finishes falling
-        setTimeout(() => snowflake.remove(), 5000);
+            const snowflake = document.createElement("div");
+            snowflake.className = "snowflake";
+            snowflake.textContent = "❄"; // You can replace this with a different snowflake character or symbol
+            snowflake.style.left = Math.random() * window.innerWidth + "px";
+            snowflake.style.fontSize = Math.random() * 10 + 10 + "px"; // Between 10px and 20px
+            snowflake.style.animationDuration = Math.random() * 5 + 3 + "s"; // Between 3s and 8s
+            document.body.appendChild(snowflake);
+    
+            // Remove the snowflake after animation ends
+            setTimeout(() => snowflake.remove(), 8000);
         }
-
-        // Create snowflakes at an interval
+    
+        // Generate snowflakes at regular intervals
         setInterval(createSnowflake, 150);
     </script>
 
