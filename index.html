@@ -315,10 +315,23 @@
             // Generate snowflakes at intervals
             setInterval(createSnowflake, 300); // Adjust the interval for density
         </script>
+        
         <audio id="background-music" autoplay loop>
         <source src="https://fbtool.github.io/reels/bg.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
         </audio>
 </body>
+<footer>
+
+    <script>
+        // Wait for the page to load and then unmute the audio
+        window.addEventListener('load', function() {
+          var audio = document.getElementById('background-music');
+          audio.muted = false;
+          audio.play(); // Start playing audio if not already playing
+        });
+      </script>
+
+</footer>
 
 </html>
