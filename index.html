@@ -24,6 +24,7 @@
             transition: background-color 0.3s, color 0.3s;
             position: relative;
         }
+
         :root {
             --background-color: #000000;
             --text-color: #ffffff;
@@ -124,7 +125,7 @@
         .snowflake {
             position: fixed;
             top: -10px;
-            color: white; /* White color for the snowflake */
+            color: white;
             pointer-events: none;
             animation: fall linear infinite;
         }
@@ -178,25 +179,15 @@
                 const locationsResponse = await fetch('locations.txt');
                 const agesResponse = await fetch('ages.txt');
 
-                const captionsText = await captionsResponse.text();
-                const hashtagsText = await hashtagsResponse.text();
-                const emojisText = await emojisResponse.text();
-                const countriesText = await countriesResponse.text();
-                const jobsText = await jobsResponse.text();
-                const namesText = await namesResponse.text();
-                const callsText = await callsResponse.text();
-                const locationsText = await locationsResponse.text();
-                const agesText = await agesResponse.text();
-
-                captions = captionsText.split('----').map(caption => caption.trim()).filter(c => !usedCaptions.includes(c));
-                hashtags = hashtagsText.split('\n').map(tag => tag.trim()).filter(tag => tag !== '');
-                emojis = emojisText.split('\n').map(emoji => emoji.trim()).filter(emoji => emoji !== '');
-                countries = countriesText.split('\n').map(country => country.trim()).filter(country => country !== '');
-                jobs = jobsText.split('\n').map(job => job.trim()).filter(job => job !== '');
-                names = namesText.split('\n').map(name => name.trim()).filter(name => name !== '');
-                calls = callsText.split('\n').map(call => call.trim()).filter(call => call !== '');
-                locations = locationsText.split('\n').map(location => location.trim()).filter(location => location !== '');
-                ages = agesText.split('\n').map(age => age.trim()).filter(age => age !== '');
+                captions = (await captionsResponse.text()).split('----').map(c => c.trim()).filter(c => !usedCaptions.includes(c));
+                hashtags = (await hashtagsResponse.text()).split('\n').map(t => t.trim()).filter(Boolean);
+                emojis = (await emojisResponse.text()).split('\n').map(e => e.trim()).filter(Boolean);
+                countries = (await countriesResponse.text()).split('\n').map(c => c.trim()).filter(Boolean);
+                jobs = (await jobsResponse.text()).split('\n').map(j => j.trim()).filter(Boolean);
+                names = (await namesResponse.text()).split('\n').map(n => n.trim()).filter(Boolean);
+                calls = (await callsResponse.text()).split('\n').map(c => c.trim()).filter(Boolean);
+                locations = (await locationsResponse.text()).split('\n').map(l => l.trim()).filter(Boolean);
+                ages = (await agesResponse.text()).split('\n').map(a => a.trim()).filter(Boolean);
 
                 shuffleCaptions();
                 updateCaptionInfo();
@@ -238,128 +229,42 @@
                 .replace('{call}', getRandomItem(calls))
                 .replace('{location}', getRandomItem(locations))
                 .replace('{age}', getRandomItem(ages));
-            const finalCaption = `${captionWithPlaceholders}\n${hashtagsSet}`;
 
+            captionBox.value = `${captionWithPlaceholders}\n\n${hashtagsSet}`;
             usedCaptions.push(nextCaption);
             localStorage.setItem('usedCaptions', JSON.stringify(usedCaptions));
-
-            captionBox.value = finalCaption;
             updateCaptionInfo();
         }
 
-        function getRandomItem(arr) {
-            return arr[Math.floor(Math.random() * arr.length)];
+        function getRandomItem(array) {
+            return array.length > 0 ? array[Math.floor(Math.random() * array.length)] : '';
         }
 
         function copyAndNext() {
             const captionBox = document.getElementById('caption-box');
-            const currentCaption = captionBox.value;
-
-            navigator.clipboard.writeText(currentCaption)
-                .then(() => {
-                    console.log('Copied to clipboard:', currentCaption);
-                })
-                .catch(err => {
-                    console.error('Could not copy text:', err);
-                });
-
-            showCaption();
-        }
-
-        function updateCaptionInfo() {
-            document.getElementById('total-captions').textContent = `Total Captions: ${captions.length + usedCaptions.length}`;
-            document.getElementById('remaining-captions').textContent = `Remaining: ${captions.length}`;
+            navigator.clipboard.writeText(captionBox.value).then(() => {
+                showCaption();
+            }).catch(err => console.error('Error copying text: ', err));
         }
 
         function resetCaptions() {
             usedCaptions = [];
-            localStorage.removeItem('usedCaptions');
+            localStorage.setItem('usedCaptions', JSON.stringify(usedCaptions));
             loadContent();
-            document.getElementById('copy-button').disabled = false;
+        }
+
+        function updateCaptionInfo() {
+            document.getElementById('total-captions').innerText = `Total Captions: ${usedCaptions.length + captions.length}`;
+            document.getElementById('remaining-captions').innerText = `Remaining: ${captions.length}`;
         }
 
         function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+            const body = document.body;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            body.setAttribute('data-theme', isDark ? '' : 'dark');
         }
 
-        window.onload = loadContent;
+        loadContent();
     </script>
-        <!-- Merry X'mas -->
-
-        <script>
-            // Function to generate snowflakes
-            function createSnowflake() {
-                const snowflake = document.createElement('div');
-                snowflake.classList.add('snowflake');
-        
-                // Randomize size and position
-                const size = Math.random() * 20 + 10; // Snowflake size between 10px and 30px
-                snowflake.style.fontSize = `${size}px`; // Set font size
-                snowflake.style.left = `${Math.random() * 100}vw`; // Random position across the viewport
-                snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`; // Fall duration 2-5 seconds
-                snowflake.style.opacity = Math.random(); // Random opacity
-        
-                // Set the ❄ symbol
-                snowflake.innerText = '❄';
-        
-                // Add the snowflake to the body
-                document.body.appendChild(snowflake);
-        
-                // Remove the snowflake once the animation is complete
-                setTimeout(() => {
-                    snowflake.remove();
-                }, 5000); // Matches maximum animation duration
-            }
-        
-            // Generate snowflakes at intervals
-            setInterval(createSnowflake, 200); // Adjust the interval for density
-        </script>
-        
-        <script>
-            // Get the audio element
-            const bgMusic = document.getElementById('background-music');
-        
-            // Set initial volume (25%)
-            bgMusic.volume = 0.25;
-        
-            // Play the music with a fade-in effect
-            function playMusic() {
-                let volume = 0; // Start from 0 volume
-                bgMusic.currentTime = 0; // Reset music to the beginning
-                bgMusic.play();
-                const fadeIn = setInterval(() => {
-                    if (volume < 0.25) {
-                        volume += 0.01; // Gradually increase volume
-                        bgMusic.volume = volume;
-                    } else {
-                        clearInterval(fadeIn); // Stop the fade-in once target volume is reached
-                    }
-                }, 100); // Adjust fade-in speed
-            }
-        
-            // Fade out the music
-            function fadeOutMusic() {
-                let volume = bgMusic.volume; // Get current volume
-                const fadeOut = setInterval(() => {
-                    if (volume > 0) {
-                        volume -= 0.01; // Gradually decrease volume
-                        bgMusic.volume = volume;
-                    } else {
-                        clearInterval(fadeOut); // Stop the fade-out once volume is 0
-                        playMusic(); // Restart the music with a fade-in
-                    }
-                }, 100); // Adjust fade-out speed
-            }
-        
-            // Start music and listen for the loop end to fade out and restart
-            bgMusic.addEventListener('ended', fadeOutMusic);
-        
-            // Start the music when the page loads
-            window.onload = playMusic;
-        </script>
-        
-            <!-- Background music -->
-    <audio id="background-music" src="bg.mp3" loop></audio>
 </body>
 </html>
