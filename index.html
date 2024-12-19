@@ -143,8 +143,6 @@
 
     <div class="container">
         <h1>Reels Captions with #Tags</h1>
-        <link rel="manifest" href="manifest.json">
-        <div class="snowflakes-container"></div>
         <textarea id="caption-box" readonly></textarea>
         <div class="caption-info">
             <span id="total-captions">Total Captions: 0</span> |
@@ -301,21 +299,6 @@
             audio.muted = false;
             audio.play(); // Start playing audio if not already playing
             });
-        </script>
-
-        <!-- PWA -->
-        <script>
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('https://fbtool.github.io/reels/service-worker.js')
-                        .then(registration => {
-                            console.log('Service Worker registered:', registration);
-                        })
-                        .catch(error => {
-                            console.log('Service Worker registration failed:', error);
-                        });
-                });
-            }
         </script>
 
         <!-- Merry X'mas -->
