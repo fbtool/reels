@@ -27,19 +27,19 @@
         :root {
             --background-color: #000000;
             --text-color: #ffffff;
-            --primary-color: #f15c95;
+            --primary-color: #EC9F05;
             --box-background-light: rgb(34 13 18 / 77%);
-            --button-bg: #ef476f;
-            --button-hover-bg: #f4a261;
+            --button-bg: #EC9F05;
+            --button-hover-bg: #FF4E00;
         }
 
         [data-theme="dark"] {
             --background-color: #222020;
             --text-color: #e0e0e0;
-            --primary-color: #FF9800;
+            --primary-color: #32cd32;
             --box-background-dark: #242323;
-            --button-bg: #FF9800;
-            --button-hover-bg: #FF5722;
+            --button-bg: #228b22;
+            --button-hover-bg: #378B29;
         }
 
         .container {
@@ -115,27 +115,12 @@
             background-color: var(--button-hover-bg);
         }
 
-        /* Snowflake container */
+        /* Page styling */
         body {
             margin: 0;
             overflow-x: hidden;
-        }
-
-        .snowflake {
-            position: fixed;
-            top: -10px;
-            color: white; /* White color for the snowflake */
-            pointer-events: none;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(100vh);
-            }
+            background: linear-gradient(to bottom, #000000, #2D3436); /* Autumn-inspired gradient */
+            font-family: 'Arial', sans-serif;
         }
     </style>
 </head>
@@ -313,36 +298,6 @@
         </script>
 
         <!-- Merry X'mas -->
-        <script>
-            // Function to generate snowflakes
-            function createSnowflake() {
-                const snowflake = document.createElement('div');
-                snowflake.classList.add('snowflake');
-        
-                // Randomize size and position
-                const size = Math.random() * 20 + 10; // Snowflake size between 10px and 30px
-                snowflake.style.fontSize = `${size}px`; // Set font size
-                snowflake.style.left = `${Math.random() * 100}vw`; // Random position across the viewport
-                snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`; // Fall duration 2-5 seconds
-                snowflake.style.opacity = Math.random(); // Random opacity
-        
-                // Set the ❄ symbol
-                snowflake.innerText = '❄';
-        
-                // Add the snowflake to the body
-                document.body.appendChild(snowflake);
-        
-                // Remove the snowflake once the animation is complete
-                setTimeout(() => {
-                    snowflake.remove();
-                }, 6000); // Matches maximum animation duration
-            }
-        
-            // Generate snowflakes at intervals
-            setInterval(createSnowflake, 300); // Adjust the interval for density
-        </script>
-        
-
 </footer>
 
 </html>
